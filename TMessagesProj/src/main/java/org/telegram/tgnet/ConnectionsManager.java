@@ -836,6 +836,9 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void onRequestNewServerIpAndPort(final int second, final int currentAccount) {
+        // Disable DNS fallback to prevent overriding custom DC settings
+        return;
+        /*
         Utilities.globalQueue.postRunnable(() -> {
             boolean networkOnline = ApplicationLoader.isNetworkOnline();
             Utilities.stageQueue.postRunnable(() -> {
@@ -874,6 +877,7 @@ public class ConnectionsManager extends BaseController {
                 }
             });
         });
+        */
     }
 
     public static void onProxyError() {
@@ -881,6 +885,10 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void getHostByName(String hostName, long address) {
+        // Disable DNS host resolution to prevent overriding custom DC settings
+        native_onHostNameResolved(hostName, address, "");
+        return;
+        /*
         AndroidUtilities.runOnUIThread(() -> {
             ResolvedDomain resolvedDomain = dnsCache.get(hostName);
             if (resolvedDomain != null && SystemClock.elapsedRealtime() - resolvedDomain.ttl < 5 * 60 * 1000) {
@@ -901,6 +909,7 @@ public class ConnectionsManager extends BaseController {
                 task.addAddress(address);
             }
         });
+        */
     }
 
     public static void onBytesReceived(int amount, int networkType, final int currentAccount) {
